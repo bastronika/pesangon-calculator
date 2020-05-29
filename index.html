@@ -18,6 +18,9 @@
       penghargaan, dan pasal 156 UU No.13/2003 tentang uang penggantian hak.
     </p>
     <br>
+
+    <div class="card shadow-lg formCard">
+
     <div class="form-group">
       <label for="masaKerja">Masa Kerja</label>
       <select class="form-control" id="masaKerja">
@@ -70,11 +73,12 @@
 
     <div class="form-group">
       <label for="sisaCuti">Sisa Cuti</label>
-      <input type="number" class="form-control" id="sisaCuti" placeholder="Sisa Cuti">
+      <input type="number" class="form-control" id="sisaCuti" placeholder="0">
     </div>
 
-    <button type="button" class="btn btn-primary" onclick="hitung()">Hitung</button>
+    <button type="button" class="btn btn-primary customButton" onclick="hitung()">Hitung</button>
 
+  </div>
     <h5 id="pesangon"></h5>
     <h5 id="penghargaan"></h5>
     <h5 id="penggantianhak"></h5>
