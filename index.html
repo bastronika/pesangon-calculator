@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <title>Kalkulator Pesangon</title>
@@ -18,8 +19,8 @@
     </p>
     <br>
     <div class="form-group">
-      <label for="exampleFormControlSelect1">Masa Kerja</label>
-      <select class="form-control" id="exampleFormControlSelect1">
+      <label for="masaKerja">Masa Kerja</label>
+      <select class="form-control" id="masaKerja">
         <option value="1">0 ke 1 Tahun</option>
         <option value="2">1 ke 2 Tahun</option>
         <option value="3">2 ke 3 Tahun</option>
@@ -47,5 +48,104 @@
         <option value="25">Lebih dari 24 Tahun</option>
       </select>
     </div>
+
+    <div class="form-group">
+      <label for="gajiPokok">Gaji Pokok + Tunjangan</label>
+      <input type="number" class="form-control" id="gajiPokok" placeholder="4500000">
+    </div>
+
+    <div class="form-group">
+      <label for="alasan">Alasan PHK</label>
+      <select class="form-control" id="alasan">
+        <option value="1">Perusahaan melakukan efisiensi</option>
+        <option value="2">Perusahaan pailit</option>
+        <option value="3">Perusahaan tutup karena merugi</option>
+        <option value="4">Perubahan Status, Penggabungan, Peleburan & Pekerja Tidak Bersedia</option>
+        <option value="5">Perubahan Status, Penggabungan, Peleburan & Pengusaha Tidak Bersedia</option>
+        <option value="6">Pekerja Mencapai Usia Pensiun Normal</option>
+        <option value="7">Pekerja Meninggal Dunia</option>
+        <option value="8">Pekerja Sakit Berkepanjangan dan cacat akibat kecelakaan kerja</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="sisaCuti">Sisa Cuti</label>
+      <input type="number" class="form-control" id="sisaCuti" placeholder="Sisa Cuti">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="hitung()">Hitung</button>
+
+    <h5 id="pesangon"></h5>
+    <h5 id="penghargaan"></h5>
+    <h5 id="penggantianhak"></h5>
+    <h5 id="uangsisacuti"></h5>
+    <h5 id="totalpesangon"></h5>
+
+    <script>
+      let formatter = new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR"
+                  });
+      function hitung(){
+        let masakerja = Number(document.getElementById("masaKerja").value);
+        let gajipokok = Number(document.getElementById("gajiPokok").value);
+        let pmtk = Number(document.getElementById("alasan").value);
+
+        let penghargaan = 0;
+        let pesangon = 0;
+
+        if (masakerja > 3) {
+          if (masakerja > 24) penghargaan = gajipokok * 10;
+          else if (masakerja > 21) {
+            penghargaan = 8 * gajipokok;
+          } else if (masakerja > 18) {
+            penghargaan = 7 * gajipokok;
+          } else if (masakerja > 15) {
+            penghargaan = 6 * gajipokok;
+          } else if (masakerja > 12) {
+            penghargaan = 5 * gajipokok;
+          } else if (masakerja > 9) {
+            penghargaan = 4 * gajipokok;
+          } else if (masakerja > 6) {
+            penghargaan = 3 * gajipokok;
+          } else penghargaan = 2 * gajipokok;
+        }
+        else penghargaan = 0;
+
+        if (masakerja > 8) pesangon = gajipokok * 9;
+        else pesangon = gajipokok * masakerja;
+
+        if (pmtk === 1 || pmtk === 5 || pmtk === 6 || pmtk === 7) pesangon = pesangon * 2;
+        else if (pmtk === 8) {
+          penghargaan = penghargaan * 2;
+          pesangon = pesangon * 2;
+        }
+        else;
+        let totalPesangon = pesangon + penghargaan;
+
+        let penggantianHak = 0.15 * totalPesangon;
+
+        let sisaCuti =
+          (gajipokok / 30) * Number(document.getElementById("sisaCuti").value);
+
+        totalPesangon = totalPesangon + penggantianHak + sisaCuti;
+
+        
+        document.getElementById("pesangon").innerHTML =
+          "Uang pesangon = " + formatter.format(pesangon);
+
+        document.getElementById("penghargaan").innerHTML =
+          "Uang penghargaan masa kerja = " + formatter.format(penghargaan);
+
+        document.getElementById("penggantianhak").innerHTML =
+          "Uang penggantian hak = " + formatter.format(penggantianHak);
+
+        document.getElementById("uangsisacuti").innerHTML =
+          "Uang pengganti sisa cuti = " + formatter.format(sisaCuti);
+
+        document.getElementById("totalpesangon").innerHTML =
+          "Total pesangon anda " + formatter.format(totalPesangon);
+      }
+    </script>
 </body>
 </html>
